@@ -1,22 +1,21 @@
-import Types from '../types'
+import Types from "../types";
 import DataStore, {FLAG_STORAGE} from "../../expand/dao/DataStore";
 import {handleData} from "../ActionUtil";
 
-export function onLoadPopularData(storeName, url, pageSize) {
+export function onRefreshTrending(storeName, url, pageSize) {
     return dispatch => {
         dispatch({
-            type: Types.POPULAR_REFRESH,
-            storeName: storeName
+            type: Types.TRENDING_REFRESH,
+            storeName
         })
         let dataStore = new DataStore()
-        dataStore.fetchData(url, FLAG_STORAGE.flag_popular)
+        dataStore.fetchData(url, FLAG_STORAGE.flag_trending)
             .then(data => {
-                handleData(FLAG_STORAGE.flag_popular, dispatch, storeName, data, pageSize)
+                handleData(FLAG_STORAGE.flag_trending, dispatch, storeName, data, pageSize)
             })
             .catch(error => {
-                console.log(error)
                 dispatch({
-                    type: Types.POPULAR_REFRESH_FAIL,
+                    type: Types.TRENDING_REFRESH_FAIL,
                     storeName,
                     error
                 })
@@ -25,7 +24,7 @@ export function onLoadPopularData(storeName, url, pageSize) {
 
 }
 
-export function onLoadMorePopular(storeName, pageIndex, pageSize, dataArray = [], callBack) {
+export function onLoadMoreTrending(storeName, pageIndex, pageSize, dataArray = [], callBack) {
     return dispatch => {
         setTimeout(() => {
             if ((pageIndex - 1) * pageSize >= dataArray.length) {
@@ -33,7 +32,7 @@ export function onLoadMorePopular(storeName, pageIndex, pageSize, dataArray = []
                     callBack('no more')
                 }
                 dispatch({
-                    type: Types.POPULAR_LOAD_MORE_FAIL,
+                    type: Types.TRENDING_LOAD_MORE_FAIL,
                     error: 'no more',
                     storeName: storeName,
                     pageIndex: --pageIndex,
@@ -42,7 +41,7 @@ export function onLoadMorePopular(storeName, pageIndex, pageSize, dataArray = []
             } else {
                 let max = pageSize * pageIndex > dataArray.length ? dataArray.length : pageSize * pageIndex
                 dispatch({
-                    type: Types.POPULAR_LOAD_MORE_SUCCESS,
+                    type: Types.TRENDING_LOAD_MORE_SUCCESS,
                     storeName,
                     pageIndex,
                     projectModes: dataArray.slice(0, max)
