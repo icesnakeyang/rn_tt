@@ -2,19 +2,17 @@ import Types from '../../action/types'
 
 const defaultState = {}
 export default function onAction(state = defaultState, action) {
-    console.log(action)
     switch (action.type) {
-        case Types.LOAD_POPULAR_SUCCESS:
-            console.log('success')
-            console.log(action)
-            console.log([action.storeName])
-            console.log(action.item)
+        case Types.POPULAR_REFRESH_SUCCESS:
             return {
                 ...state,
                 [action.storeName]: {
                     ...[action.storeName],
-                    item: action.item,
-                    isLoading: false
+                    items: action.items,
+                    projectModes: action.projectModes,
+                    isLoading: false,
+                    hideLoadingMore: false,
+                    pageIndex: action.pageIndex
                 }
             }
         case Types.POPULAR_REFRESH:
@@ -22,14 +20,34 @@ export default function onAction(state = defaultState, action) {
                 ...state,
                 [action.storeName]: {
                     ...[action.store],
-                    isLoading: true
+                    isLoading: true,
+                    hideLoadingMore: true
                 }
             }
-        case Types.LOAD_POPULAR_FAIL:
+        case Types.POPULAR_REFRESH_FAIL:
             return {
                 ...state,
                 [action.storeName]: {
                     isLoading: false
+                }
+            }
+        case Types.POPULAR_LOAD_MORE_SUCCESS:
+            return {
+                ...state,
+                [action.storeName]: {
+                    ...state[action.storeName],
+                    projectModes: action.projectModes,
+                    hideLoadingMore: false,
+                    pageIndex: action.pageIndex
+                }
+            }
+        case Types.POPULAR_LOAD_MORE_FAIL:
+            return {
+                ...state,
+                [action.storeName]: {
+                    ...state[action.storeName],
+                    hideLoadingMore: true,
+                    pageIndex: action.pageIndex
                 }
             }
         default:

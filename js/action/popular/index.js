@@ -1,9 +1,7 @@
 import Types from '../types'
 import DataStore from "../../expand/dao/DataStore";
 
-export function onLoadPopularData(storeName, url) {
-    console.log(storeName)
-    console.log(url)
+export function onLoadPopularData(storeName, url, pageSize) {
     return dispatch => {
         dispatch({
             type: Types.POPULAR_REFRESH,
@@ -12,13 +10,12 @@ export function onLoadPopularData(storeName, url) {
         let dataStore = new DataStore()
         dataStore.fetchData(url)
             .then(data => {
-                console.log(data)
-                handleData(dispatch, storeName, data)
+                handleData(dispatch, storeName, data, pageSize)
             })
             .catch(error => {
                 console.log(error)
                 dispatch({
-                    type: Types.LOAD_POPULAR_FAIL,
+                    type: Types.POPULAR_REFRESH_FAIL,
                     storeName,
                     error
                 })
@@ -27,11 +24,43 @@ export function onLoadPopularData(storeName, url) {
 
 }
 
-function handleData(dispatch, storeName, data) {
-    console.log(data.data.items)
+export function onLoadMorePopular(storeName, pageIndex, pageSize, dataArray = [], callBack) {
+    return dispatch => {
+        setTimeout(() => {
+            if ((pageIndex - 1) * pageSize >= dataArray.length) {
+                if (typeof callBack === 'function') {
+                    callBack('no more')
+                }
+                dispatch({
+                    type: Types.POPULAR_LOAD_MORE_FAIL,
+                    error: 'no more',
+                    storeName: storeName,
+                    pageIndex: --pageIndex,
+                    projectModes: dataArray
+                })
+            } else {
+                let max = pageSize * pageIndex > dataArray.length ? dataArray.length : pageSize * pageIndex
+                dispatch({
+                    type: Types.POPULAR_LOAD_MORE_SUCCESS,
+                    storeName,
+                    pageIndex,
+                    projectModes: dataArray.slice(0, max)
+                })
+            }
+        }, 500)
+    }
+}
+
+function handleData(dispatch, storeName, data, pageSize) {
+    let fixItems = []
+    if (data && data.data && data.data.items) {
+        fixItems = data.data.items
+    }
     dispatch({
-        type: Types.LOAD_POPULAR_SUCCESS,
-        item: data && data.data && data.data.items,
-        storeName
+        type: Types.POPULAR_REFRESH_SUCCESS,
+        projectModes: pageSize > fixItems.length ? fixItems : fixItems.slice(0, pageSize),
+        storeName,
+        pageIndex: 1,
+        items: fixItems
     })
 }

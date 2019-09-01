@@ -18,7 +18,6 @@ export default class AsyncStorageDemoPage extends Component<Props> {
     }
 
     async doSave() {
-        console.log(this.value)
         AsyncStorage.setItem(KEY, this.value, error => {
             error && console.log(error.toString())
         })
@@ -29,7 +28,6 @@ export default class AsyncStorageDemoPage extends Component<Props> {
             this.setState({
                 showText: value
             })
-            console.log(value)
             error && console.log(error.toString())
         })
     }

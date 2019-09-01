@@ -4,12 +4,9 @@ export default class DataStore {
     fetchData(url) {
         return new Promise((resolve, reject) => {
             this.fetchLocalData(url).then((wrapData) => {
-                console.log(1)
                 if (wrapData && DataStore.checkTimeStampValid(wrapData.timestamp)) {
-                    console.log(2)
                     resolve(wrapData)
                 } else {
-                    console.log(3)
                     this.fetchNetData(url).then((data) => {
                         resolve(this._wrapData(data))
                     }).catch((error) => {
@@ -17,8 +14,6 @@ export default class DataStore {
                     })
                 }
             }).catch((error) => {
-                console.log(4)
-                console.log(error)
                 this.fetchNetData(url).then((data) => {
                     resolve(this._wrapData(data))
                 }).catch((error) => {
@@ -29,7 +24,6 @@ export default class DataStore {
     }
 
     saveData(url, data, callback) {
-        console.log('save to local')
         if (!data || !url) {
             return
         }
@@ -37,7 +31,6 @@ export default class DataStore {
     }
 
     fetchLocalData(url) {
-        console.log('fetch from local')
         return new Promise((resolve, reject) => {
             AsyncStorage.getItem(url, (error, result) => {
                 if (!error) {
@@ -57,7 +50,6 @@ export default class DataStore {
 
     fetchNetData(url) {
         return new Promise((resolve, reject) => {
-            console.log('fetch from network')
             fetch(url)
                 .then((response) => {
                     if (response.ok) {

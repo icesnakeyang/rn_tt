@@ -16,7 +16,6 @@ class TrendingPage extends Component<Props> {
                 <Button
                     title={'改变主题色'}
                     onPress={() => {
-                        console.log(1)
                         this.props.onThemeChange('#099')
                     }}
                 />

@@ -18,12 +18,9 @@ export default class DataStoreDemoPage extends Component<Props> {
     }
 
     loadData() {
-        console.log(this.value)
         let url = `https://api.github.com/search/repositories?q=${this.value}`
-        console.log(url)
         this.dataStore.fetchData(url)
             .then(data => {
-                console.log(data)
                 let showData = `初次加载时间：${new Date(data.timestamp)}\n${JSON.stringify(data.data)}`
                 this.setState({
                     showText: showData

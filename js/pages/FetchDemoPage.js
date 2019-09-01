@@ -18,10 +18,8 @@ export default class FetchDemoPage extends Component<Props> {
 
     loadData() {
         let url = `https://api.github.com/search/repositories?q=${this.searchKey}`
-        console.log(url)
         fetch(url)
             .then(response => {
-                console.log(response)
                 if (response.ok) {
                     return response.text()
                 }
@@ -33,7 +31,6 @@ export default class FetchDemoPage extends Component<Props> {
                 })
             })
             .catch(e => {
-                console.log('err')
                 this.setState({
                     showText: e.toString()
                 })

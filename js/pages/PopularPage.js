@@ -9,12 +9,14 @@ import {
     StyleSheet,
     Button,
     FlatList,
-    RefreshControl
+    RefreshControl,
+    ActivityIndicator
 } from 'react-native'
 import NavigationUtil from "../navigators/NavigationUtil";
 import {connect} from "react-redux";
 import actions from "../action";
 import PopularItem from "../common/PopularItem";
+import Toast from "react-native-easy-toast";
 
 const URL = 'https://api.github.com/search/repositories?q='
 const QUERY_STR = '&sort=stars'
@@ -57,6 +59,8 @@ export default class PopularPage extends Component<Props> {
     }
 }
 
+const pageSize = 10
+
 class PopularTab extends Component<Props> {
     constructor(props) {
         super(props)
@@ -68,11 +72,35 @@ class PopularTab extends Component<Props> {
         this.loadData()
     }
 
-    loadData() {
-        const {onLoadPopularData} = this.props
+    loadData(loadMore) {
+        const {onLoadPopularData, onLoadMorePopular} = this.props
+        const store = this._store()
         const url = this.genFetchUrl(this.storeName)
-        onLoadPopularData(this.storeName, url)
+        if (loadMore) {
+            onLoadMorePopular(this.storeName, ++store.pageIndex, pageSize, store.items, callback => {
+                this.refs.toast.show('没有更多了')
+            })
+        } else {
+            onLoadPopularData(this.storeName, url, pageSize)
+        }
+
+
     }
+
+    _store() {
+        const {popular} = this.props
+        let store = popular[this.storeName]
+        if (!store) {
+            store = {
+                items: [],
+                isLoading: false,
+                projectModes: [],
+                hideLoadingMore: true
+            }
+        }
+        return store
+    }
+
 
     genFetchUrl(key) {
         return URL + key + QUERY_STR
@@ -80,7 +108,6 @@ class PopularTab extends Component<Props> {
 
     renderItem(data) {
         const item = data.item
-        console.log(item)
         return (
             <PopularItem
                 item={item}
@@ -91,21 +118,22 @@ class PopularTab extends Component<Props> {
         )
     }
 
+    genIndicator() {
+        return this._store().hideLoadingMore ? null :
+            <View style={styles.indicatorContainer}>
+                <ActivityIndicator
+                    style={styles.indicator}
+                />
+                <Text>加载更多...</Text>
+            </View>
+    }
+
     render() {
-        const {popular} = this.props
-        console.log(popular)
-        let store = popular[this.storeName]
-        if (!store) {
-            store = {
-                item: [],
-                isLoading: false
-            }
-        }
-        console.log(store)
+        let store = this._store()
         return (
             <View style={styles.container}>
                 <FlatList
-                    data={store.item}
+                    data={store.projectModes}
                     renderItem={data => this.renderItem(data)}
                     keyExtractor={item => '' + item.id}
                     refreshControl={
@@ -118,6 +146,16 @@ class PopularTab extends Component<Props> {
                             tintColor={THEME_COLOR}
                         />
                     }
+                    ListFooterComponent={() => this.genIndicator()}
+                    onEndReached={() => {
+                        console.log('-----load data------')
+                        this.loadData(true)
+                    }}
+                    onEndReachedThreshold={0.5}
+                />
+                <Toast
+                    ref={'toast'}
+                    position={'center'}
                 />
             </View>
         )
@@ -128,8 +166,11 @@ const mapStateToProps = state => ({
     popular: state.popular
 })
 const mapDispatchToProps = dispatch => ({
-    onLoadPopularData: (storeName, url) => dispatch(
-        actions.onLoadPopularData(storeName, url)
+    onLoadPopularData: (storeName, url, pageSize) => dispatch(
+        actions.onLoadPopularData(storeName, url, pageSize)
+    ),
+    onLoadMorePopular: (storeName, pageIndex, pageSize, items, callBack) => dispatch(
+        actions.onLoadMorePopular(storeName, pageIndex, pageSize, items, callBack)
     )
 })
 
@@ -150,5 +191,13 @@ const styles = StyleSheet.create({
     },
     tabStyle: {
         // width: 75
+    },
+    indicatorContainer: {
+        alignItems: 'center'
+    },
+    indicator: {
+        color: '#ff0000',
+        margin: 10
     }
+
 })

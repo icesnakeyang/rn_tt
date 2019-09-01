@@ -20,7 +20,6 @@ class HomePage extends Component<Props> {
 
     onBackPress = () => {
         const {dispatch, nav} = this.props
-        console.log(nav)
         if (nav.routes[1].index === 0) {
             return false
         }
