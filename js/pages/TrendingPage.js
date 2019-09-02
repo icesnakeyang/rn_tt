@@ -10,7 +10,7 @@ import {
     Button,
     FlatList,
     RefreshControl,
-    ActivityIndicator
+    ActivityIndicator, DeviceInfo
 } from 'react-native'
 import NavigationUtil from "../navigators/NavigationUtil";
 import {connect} from "react-redux";
@@ -63,7 +63,8 @@ export default class TrendingPage extends Component<Props> {
             )
         )
         return (
-            <View style={{flex: 1, marginTop: 0}}>
+            <View style={{flex: 1, marginTop: DeviceInfo.isIPhoneX_deprecated ? 30 : 0}}>
+                {navigationBar}
                 <TabNavigator/>
             </View>
         )

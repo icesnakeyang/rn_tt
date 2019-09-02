@@ -10,9 +10,9 @@ import {
     Button,
     FlatList,
     RefreshControl,
-    ActivityIndicator
+    ActivityIndicator,
+    DeviceInfo
 } from 'react-native'
-import NavigationUtil from "../navigators/NavigationUtil";
 import {connect} from "react-redux";
 import actions from "../action";
 import PopularItem from "../common/PopularItem";
@@ -52,7 +52,7 @@ export default class PopularPage extends Component<Props> {
             )
         )
         return (
-            <View style={{flex: 1, marginTop: 0}}>
+            <View style={{flex: 1, marginTop: DeviceInfo.isIPhoneX_deprecated ? 30 : 0}}>
                 <TabNavigator/>
             </View>
         )
