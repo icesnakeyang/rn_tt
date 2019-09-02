@@ -24,7 +24,7 @@ const THEME_COLOR = 'red'
 export default class PopularPage extends Component<Props> {
     constructor(props) {
         super(props)
-        this.tabNames = ['Java', 'ios', '徐梦洁']
+        this.tabNames = ['Java']
     }
 
     _genTabs() {
@@ -83,8 +83,6 @@ class PopularTab extends Component<Props> {
         } else {
             onLoadPopularData(this.storeName, url, pageSize)
         }
-
-
     }
 
     _store() {
@@ -148,7 +146,6 @@ class PopularTab extends Component<Props> {
                     }
                     ListFooterComponent={() => this.genIndicator()}
                     onEndReached={() => {
-                        console.log('-----load data------')
                         this.loadData(true)
                     }}
                     onEndReachedThreshold={0.5}
@@ -181,7 +178,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         // alignItems: 'center',
-        backgroundColor: '#69ffb9',
+        backgroundColor: '#e9eeee',
         // width: 500
     },
     welcome: {

@@ -11,7 +11,7 @@ export function onRefreshTrending(storeName, url, pageSize) {
         let dataStore = new DataStore()
         dataStore.fetchData(url, FLAG_STORAGE.flag_trending)
             .then(data => {
-                handleData(FLAG_STORAGE.flag_trending, dispatch, storeName, data, pageSize)
+                handleData(Types.TRENDING_REFRESH_SUCCESS, dispatch, storeName, data, pageSize)
             })
             .catch(error => {
                 dispatch({

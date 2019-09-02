@@ -19,7 +19,7 @@ export default function onAction(state = defaultState, action) {
             return {
                 ...state,
                 [action.storeName]: {
-                    ...[action.store],
+                    ...[action],
                     isLoading: true,
                     hideLoadingMore: true
                 }

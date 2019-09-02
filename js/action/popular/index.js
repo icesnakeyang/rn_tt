@@ -11,10 +11,9 @@ export function onLoadPopularData(storeName, url, pageSize) {
         let dataStore = new DataStore()
         dataStore.fetchData(url, FLAG_STORAGE.flag_popular)
             .then(data => {
-                handleData(FLAG_STORAGE.flag_popular, dispatch, storeName, data, pageSize)
+                handleData(Types.POPULAR_REFRESH_SUCCESS, dispatch, storeName, data, pageSize)
             })
             .catch(error => {
-                console.log(error)
                 dispatch({
                     type: Types.POPULAR_REFRESH_FAIL,
                     storeName,

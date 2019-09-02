@@ -11,11 +11,12 @@ export function handleData(actionType, dispatch, storeName, data, pageSize) {
             }
         }
     }
-    dispatch({
+    const dispatchData = {
         type: actionType,
         projectModes: pageSize > fixItems.length ? fixItems : fixItems.slice(0, pageSize),
         storeName,
         pageIndex: 1,
         items: fixItems
-    })
+    }
+    dispatch(dispatchData)
 }

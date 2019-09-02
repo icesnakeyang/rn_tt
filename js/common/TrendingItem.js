@@ -7,11 +7,12 @@ import {
     StyleSheet
 } from 'react-native'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
+import HtmlView from "react-native-htmlview";
 
-export default class PopularItem extends Component {
+export default class TrendingItem extends Component {
     render() {
         const {item} = this.props
-        if (!item || !item.owner) {
+        if (!item) {
             return null
         }
         let favoriteButton =
@@ -28,23 +29,33 @@ export default class PopularItem extends Component {
                     style={{color: 'red'}}
                 />
             </TouchableOpacity>
+        let description = '<p>' + item.description + '</p>'
         return (
             <TouchableOpacity
                 onPress={this.props.onSelect}
             >
                 <View style={styles.cell_container}>
-                    <Text style={styles.title}>{item.full_name}</Text>
-                    <Text style={styles.description}>{item.description}</Text>
+                    <Text style={styles.title}>{item.fullName}</Text>
+                    <HtmlView
+                        value={description}
+                        onLinkPress={(url)=>{}}
+                        stylesheet={{
+                            p:styles.description,
+                            a:styles.description
+                        }}
+                    />
+                    <Text style={styles.description}>{item.meta}</Text>
                     <View style={styles.row}>
                         <View style={styles.row}>
-                            <Text>Author:</Text>
-                            <Image style={{height: 32, width: 32, marginLeft: 5}}
-                                   source={{uri: item.owner.avatar_url}}
-                            />
-                        </View>
-                        <View style={styles.row}>
-                            <Text>Star:</Text>
-                            <Text>{item.stargazers_count}</Text>
+                            <Text>Built by:</Text>
+                            {item.contributors.map((result, i, arr) => {
+                                return <Image
+                                    key={i}
+                                    style={{height: 22, width: 22, margin: 2}}
+                                    source={{uri: arr[i]}}
+                                />
+                            })}
+
                         </View>
                         {favoriteButton}
                     </View>
@@ -63,7 +74,7 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     cell_container: {
-        backgroundColor: '#fefffb',
+        backgroundColor: '#fefeff',
         padding: 10,
         marginLeft: 5,
         marginRight: 5,
