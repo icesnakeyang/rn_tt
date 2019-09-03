@@ -11,4 +11,8 @@ export default class NavigationUtil {
             {...params}
         )
     }
+
+    static goBack(navigation) {
+        navigation.goBack()
+    }
 }

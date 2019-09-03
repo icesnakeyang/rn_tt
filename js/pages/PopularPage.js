@@ -17,6 +17,7 @@ import {connect} from "react-redux";
 import actions from "../action";
 import PopularItem from "../common/PopularItem";
 import Toast from "react-native-easy-toast";
+import NavigationUtil from "../navigators/NavigationUtil";
 
 const URL = 'https://api.github.com/search/repositories?q='
 const QUERY_STR = '&sort=stars'
@@ -110,7 +111,9 @@ class PopularTab extends Component<Props> {
             <PopularItem
                 item={item}
                 onSelect={() => {
-
+                    NavigationUtil.goPage({
+                        projectModes: item
+                    }, 'DetailPage')
                 }}
             ></PopularItem>
         )
