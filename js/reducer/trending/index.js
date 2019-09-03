@@ -9,7 +9,7 @@ export default function onAction(state = defaultState, action) {
                 [action.storeName]: {
                     ...[action.storeName],
                     items: action.items,
-                    projectModes: action.projectModes,
+                    projectModels: action.projectModels,
                     isLoading: false,
                     hideLoadingMore: false,
                     pageIndex: action.pageIndex
@@ -36,7 +36,7 @@ export default function onAction(state = defaultState, action) {
                 ...state,
                 [action.storeName]: {
                     ...state[action.storeName],
-                    projectModes: action.projectModes,
+                    projectModels: action.projectModels,
                     hideLoadingMore: false,
                     pageIndex: action.pageIndex
                 }

@@ -181,7 +181,7 @@ class TrendingTab extends Component<Props> {
             store = {
                 items: [],
                 isLoading: false,
-                projectModes: [],
+                projectModels: [],
                 hideLoadingMore: true
             }
         }
@@ -201,7 +201,7 @@ class TrendingTab extends Component<Props> {
                 item={item}
                 onSelect={(callback) => {
                     NavigationUtil.goPage({
-                        projectModes: item,
+                        projectModels: item,
                         callback
                     }, 'DetailPage')
                 }}
@@ -224,7 +224,7 @@ class TrendingTab extends Component<Props> {
         return (
             <View style={styles.container}>
                 <FlatList
-                    data={store.projectModes}
+                    data={store.projectModels}
                     renderItem={data => this.renderItem(data)}
                     keyExtractor={item => '' + (item.id || item.fullName)}
                     refreshControl={

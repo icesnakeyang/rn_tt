@@ -20,7 +20,7 @@ export default class DetailPage extends Component<Props> {
     constructor(props) {
         super(props)
         this.params = this.props.navigation.state.params
-        const projectModels = this.params.projectModes
+        const projectModels = this.params.projectModels
         this.url = projectModels.html_url || TRENDING_URL + projectModels.fullName
         const title = projectModels.full_name || projectModels.fullName
         this.state = {
